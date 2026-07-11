@@ -6,23 +6,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultsArea = document.getElementById('resultsArea');
     const recommendRouteCard = document.getElementById('recommendRouteCard');
     const otherRoutesList = document.getElementById('otherRoutesList');
-    // フォーム送信時のイベント処理
+
+    window.customLimit = 4;
+
     searchForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const building = locationSelect.value;
         const period = periodSelect.value;
         if (building && period) {
-            Promise.resolve(fetchRouteData(building, period));
+            fetchRouteData(building, period);
         }
     });
-    // fetch()によるバックエンドとの非同期通信
     async function fetchRouteData(building, period) {
         const bu = walkdata[building];
         if (bu === undefined) {
             throw new Error(`undefined ${building}`);
         }
         let time;
-        let day = new Date().getDay();
+        const n = new Date();
+        let day = n.getDay();
         switch (period) {
             case "1限終わり":time = 37800;break;
             case "2限終わり":time = 44100;break;
@@ -30,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
             case "4限終わり":time = 58800;break;
             case "5限終わり":time = 65100;break;
             default:
-                const n = new Date();
                 time = n.getHours() * 3600 + n.getMinutes() * 60;
                 if (time < 4*3600) {
                     time +=  24*3600;
@@ -39,17 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
         }
         try {
-            const data = await findbus(time, bu, 4, day);
+            const data = await findbus(time, bu, window.customLimit, day);
             renderAllRoutes(data, building, "JR八王子駅北口");
         }
         catch {
             console.error('データの取得に失敗しました');
         }
-    }
-    // 取得したルートデータを画面に反映させる関数
-    function renderAllRoutes(data, from, to) {
+    }    function renderAllRoutes(data, from, to) {
         resultsArea.classList.remove('is-hidden');
-        // ④ おすすめルートの描画（運賃を削除し、建物出発時刻と経由を追加）
         const recommend = data[0];
         if (recommend) {
             recommendRouteCard.innerHTML = `
@@ -125,9 +123,9 @@ async function loadTimetable() {
     const date = 20260626;
     const cachedData = localStorage.getItem('bus_timetable_cache');
     if (last_date === date && cachedData) {
+        console.log('新ダイヤ（または初回）のため、データをサーバーから再取得します...');
         return JSON.parse(cachedData);
     }
-    // 2. キャッシュがなければ、初めてGitHub PagesからJSONを取得する
     const response = await fetch('./timetable.json');
     const data = await response.json();
     localStorage.setItem('bus_timetable_cache', JSON.stringify(data));
@@ -137,16 +135,11 @@ async function loadTimetable() {
 
 function ttn(bustype) {
     switch (bustype) {
-        case 0:
-            return "直通";
-        case 1:
-            return "16号01";
-        case 2:
-            return "ひ02";
-        case 3:
-            return "ひ04";
-        case 4:
-            return "16号06";
+        case 0:return "直通";
+        case 1:return "16号01";
+        case 2:return "ひ02";
+        case 3:return "ひ04";
+        case 4:return "16号06";
         default:
             throw new Error(`unkown bustype:${bustype}`);
     }
