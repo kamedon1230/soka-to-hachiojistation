@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOKA Bus Navigation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-left">
+      <span class="bus-icon">🚌</span>
+      <div class="header-title-group">
+        <h1>SOKA Bus Navigation</h1>
+        <p class="subtitle">創価大学生のためのバスルート案内</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="notice-top">※時刻は目安です</span>
+    </div>
+  </header>
+
+  <main class="app-container">
+    
+    <section class="hero-section">
+      <h2>八王子駅までの最適ルートを案内します</h2>
+      <p>現在いる建物と検索時刻を選択すると、おすすめの帰宅ルートを表示します。</p>
+    </section>
+
+    <section class="search-section">
+      <form id="searchForm" class="search-form">
+        <div class="form-group">
+          <label for="locationSelect">現在地（建物）</label>
+          <select id="locationSelect" required>
+            <option value="" disabled selected>建物名を選択してください</option>
+            <option value="中央教育棟">中央教育棟</option>
+            <option value="本部棟">本部棟</option>
+            <option value="理工学部棟">理工学部棟</option>
+            <option value="看護学部棟">看護学部棟</option>
+            <option value="教育学部棟">教育学部棟</option>
+            <option value="学生センター">学生センター</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="periodSelect">検索時刻</label>
+          <select id="periodSelect" required>
+            <option value="現在時刻" selected>現在時刻</option>
+            <option value="1限終わり">1限終わり (10:45)</option>
+            <option value="2限終わり">2限終わり (12:15)</option>
+            <option value="3限終わり">3限終わり (14:35)</option>
+            <option value="4限終わり">4限終わり (16:20)</option>
+            <option value="5限終わり">5限終わり (18:05)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="search-btn">
+          <span class="search-icon">🔍</span> ルートを検索
+        </button>
+      </form>
+    </section>
+
+    <div id="resultsArea" class="results-area is-hidden">
+      <section class="result-section">
+        <h3 class="section-title"><span class="star-icon">⭐</span> おすすめルート</h3>
+        <div id="recommendRouteCard"></div>
+      </section>
+
+      <section class="result-section">
+        <h3 class="section-title"><span class="sub-bus-icon">🚌</span> その他のルート</h3>
+        <div id="otherRoutesList" class="other-routes-list"></div>
+      </section>
+    </div>
+
+  </main>
+
+  <footer class="app-footer">
+    <p>時刻は目安です。交通状況等により前後する場合があります。</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
