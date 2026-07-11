@@ -42,10 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             let data = await findbus(time, bu, window.customLimit, day);
             if (!data.length) {
-                console.log('本日のバスはすべて終了しました。明日の始発を検索します。');
-                data = await findbus(time -= 24*3600, bu, window.customLimit, (day+1)%7, true);
+                data = await findbus(time -= 24*3600, bu, window.customLimit, (day+1)%7);
+                renderAllRoutes(data, building, "JR八王子駅北口",true);
             }
-            renderAllRoutes(data, building, "JR八王子駅北口");
+            else{
+                renderAllRoutes(data, building, "JR八王子駅北口");
+            }
         }
         catch {
             console.error('データの取得に失敗しました');
