@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </span>
           </div>
           <div class="other-route-side">
-            <span class="side-badge">所要時間 ${route.du}分</span>
+            <span class="side-badge">所要時間 ${toMinute(route.du)}分</span>
           </div>
         `;
                 otherRoutesList.appendChild(row);
@@ -194,5 +194,5 @@ function toMinute(time) {
 }
 function toHourString(time) {
     time = Math.ceil(time / 60);
-    return `${Math.ceil(time / 60)}:${time % 60}`;
+    return `${Math.ceil(time / 60)}:${(time % 60).toString().padStart(2,"0")}`;
 }
