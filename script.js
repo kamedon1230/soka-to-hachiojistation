@@ -196,4 +196,3 @@ function toHourString(time) {
     time = Math.ceil(time / 60);
     return `${Math.ceil(time / 60)}:${time % 60}`;
 }
-await findbus(1, [21, 1, 22], 5);
