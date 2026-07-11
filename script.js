@@ -140,7 +140,7 @@ async function loadTimetable() {
     localStorage.setItem('bus_timetable_cache', JSON.stringify(data));
     return data;
 }
-import * as fs from "fs";
+
 function ttn(bustype) {
     switch (bustype) {
         case 0:
@@ -158,8 +158,8 @@ function ttn(bustype) {
     }
 }
 async function findbus(time, from, limit) {
-    // const db = await loadTimetable();
-    const db = JSON.parse(await fs.promises.readFile("./.temp/v.json", "utf-8"));
+    const db = await loadTimetable();
+    // const db = JSON.parse(await fs.promises.readFile("./.temp/v.json", "utf-8"));
     // const bd:Record<string,[number,number,number]|undefined> = JSON.parse(await fs.promises.readFile("./.temp/v.json","utf-8"));
     const days = new Date().getDay();
     const r1 = db.filter(bus => bus[days + 5] && (bus[1] >= time));
