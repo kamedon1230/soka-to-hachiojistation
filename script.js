@@ -22,29 +22,24 @@ document.addEventListener('DOMContentLoaded', () => {
             throw new Error(`undefined ${building}`);
         }
         let time;
+        let day = new Date().getDay();
         switch (period) {
-            case "1限終わり":
-                time = 37800;
-                break;
-            case "2限終わり":
-                time = 44100;
-                break;
-            case "3限終わり":
-                time = 52500;
-                break;
-            case "4限終わり":
-                time = 58800;
-                break;
-            case "5限終わり":
-                time = 65100;
-                break;
+            case "1限終わり":time = 37800;break;
+            case "2限終わり":time = 44100;break;
+            case "3限終わり":time = 52500;break;
+            case "4限終わり":time = 58800;break;
+            case "5限終わり":time = 65100;break;
             default:
                 const n = new Date();
                 time = n.getHours() * 3600 + n.getMinutes() * 60;
+                if (time < 4*3600) {
+                    time +=  24*3600;
+                    day = (day+6)%7;
+                }
                 break;
         }
         try {
-            const data = await findbus(time, bu, 4);
+            const data = await findbus(time, bu, 4, day);
             renderAllRoutes(data, building, "JR八王子駅北口");
         }
         catch {
@@ -126,18 +121,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 async function loadTimetable() {
-    const date = 20260831;
-    // 1. まずスマホ（ブラウザ）のローカルストレージを探す
+    const last_date = localStorage.getItem('data_base');
+    const date = 20260626;
     const cachedData = localStorage.getItem('bus_timetable_cache');
-    if (cachedData) {
-        // キャッシュがあれば、通信を一切せずにそれを返す（通信量0！）
+    if (last_date === date && cachedData) {
         return JSON.parse(cachedData);
     }
     // 2. キャッシュがなければ、初めてGitHub PagesからJSONを取得する
     const response = await fetch('./timetable.json');
     const data = await response.json();
-    // 3. 取得したデータをスマホに保存しておく（次回からは上のif文に入る）
     localStorage.setItem('bus_timetable_cache', JSON.stringify(data));
+    localStorage.setItem('data_base',date);
     return data;
 }
 
@@ -157,11 +151,8 @@ function ttn(bustype) {
             throw new Error(`unkown bustype:${bustype}`);
     }
 }
-async function findbus(time, from, limit) {
+async function findbus(time, from, limit, days) {
     const db = await loadTimetable();
-    // const db = JSON.parse(await fs.promises.readFile("./.temp/v.json", "utf-8"));
-    // const bd:Record<string,[number,number,number]|undefined> = JSON.parse(await fs.promises.readFile("./.temp/v.json","utf-8"));
-    const days = new Date().getDay();
     const r1 = db.filter(bus => bus[days + 5] && (bus[1] >= time));
     const r2 = [];
     let best;
@@ -172,7 +163,7 @@ async function findbus(time, from, limit) {
             besttime = bus[2] - from[0];
         }
         if (bus[3] && (bus[3] - from[1] * 60 >= besttime)) {
-            best = { from: "創価大学創大門", dep: bus[3], dw: bus[3] - from[1] * 60, wt: from[2], du: (bus[1] - bus[3] + from[1] * 60), type: ttn(bus[0]), at: bus[1] };
+            best = { from: "創価大学創大門", dep: bus[3], dw: bus[3] - from[1] * 60, wt: from[1], du: (bus[1] - bus[3] + from[1] * 60), type: ttn(bus[0]), at: bus[1] };
             besttime = bus[3] - from[1];
         }
         if (bus[4] && (bus[4] - from[2] * 60 >= besttime)) {
@@ -190,9 +181,9 @@ async function findbus(time, from, limit) {
     return r2;
 }
 function toMinute(time) {
-    return `${time / 60}`;
+    return `${Math.round(time / 60)}`;
 }
 function toHourString(time) {
-    time = Math.ceil(time / 60);
-    return `${Math.ceil(time / 60)}:${(time % 60).toString().padStart(2,"0")}`;
+    minute = Math.floor(time / 60);
+    return `${(Math.floor(minute / 60)).toString().padStart(2,"0")}:${(minute % 60).toString().padStart(2,"0")}`;
 }

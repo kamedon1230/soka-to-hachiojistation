@@ -403,3 +403,9 @@ body {
   font-weight: 600;
   margin-right: 4px;
 }
+
+.node-time, 
+.other-flow {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: -0.5px;
+}
