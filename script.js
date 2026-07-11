@@ -41,15 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         try {
             let data = await findbus(time, bu, window.customLimit, day);
-            if (!data) {
-                data = await findbus(time -= 24*3600, bu, window.customLimit, (day+1)%7);
+            if (!data.length) {
+                console.log('本日のバスはすべて終了しました。明日の始発を検索します。');
+                data = await findbus(time -= 24*3600, bu, window.customLimit, (day+1)%7, true);
             }
             renderAllRoutes(data, building, "JR八王子駅北口");
         }
         catch {
             console.error('データの取得に失敗しました');
         }
-    }    function renderAllRoutes(data, from, to) {
+    }    function renderAllRoutes(data, from, to, next=false) {
         resultsArea.classList.remove('is-hidden');
         const recommend = data[0];
         if (recommend) {
@@ -90,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
 
-          <div class="recommend-msg">✓ このルートが最短で到着できます。</div>
+          <div class="recommend-msg">${next?"始発ルートをご案内しています。":"✓ このルートが最短で到着できます。"}</div>
         </div>
       `;
         }
