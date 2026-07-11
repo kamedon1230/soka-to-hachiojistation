@@ -40,7 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
         }
         try {
-            const data = await findbus(time, bu, window.customLimit, day);
+            let data = await findbus(time, bu, window.customLimit, day);
+            if (!data) {
+                data = await findbus(time -= 24*3600, bu, window.customLimit, (day+1)%7);
+            }
             renderAllRoutes(data, building, "JR八王子駅北口");
         }
         catch {
@@ -91,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
         }
-        // ⑤ その他のルートの描画（運賃を削除し、経由を追加）
         otherRoutesList.innerHTML = '';
         const others = data.slice(1);
         if (others && others.length > 0) {
