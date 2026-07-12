@@ -1,15 +1,14 @@
-/* カラー変数と全体のリセット */
 :root {
-  --main-blue: #005bac;       /* アクセントカラーの青 */
+  --main-blue: #005bac;
   --hover-blue: #004482;
-  --bg-white: #ffffff;        /* 基調となる白 */
-  --bg-light: #f8f9fa;        /* 柔らかな背景グレー */
+  --bg-white: #ffffff;
+  --bg-light: #f8f9fa;
   --text-dark: #333333;
   --text-muted: #666666;
   --border-color: #e2e8f0;
-  --recommend-bg: #fffdf5;    /* おすすめルート用の薄い黄色の背景 */
+  --recommend-bg: #fffdf5;
   --recommend-border: #fef3c7;
-  --success-green: #e6f4ea;   /* 最短メッセージ用の薄い緑 */
+  --success-green: #e6f4ea;
   --success-text: #137333;
 }
 
@@ -26,7 +25,6 @@ body {
   line-height: 1.6;
 }
 
-/* ① ヘッダー */
 .app-header {
   background-color: var(--main-blue);
   color: #ffffff;
@@ -63,14 +61,12 @@ body {
   opacity: 0.9;
 }
 
-/* コンテナ */
 .app-container {
   max-width: 900px;
   margin: 0 auto;
   padding: 40px 20px 100px;
 }
 
-/* ② タイトルセクション */
 .hero-section {
   text-align: center;
   margin-bottom: 35px;
@@ -87,7 +83,6 @@ body {
   font-size: 0.95rem;
 }
 
-/* ③ 条件選択エリア */
 .search-section {
   background-color: var(--bg-light);
   border: 1px solid var(--border-color);
@@ -101,7 +96,7 @@ body {
   display: flex;
   align-items: flex-end;
   gap: 20px;
-  flex-wrap: wrap; /* スマホ時に自動で縦並びにする設定 */
+  flex-wrap: wrap;
 }
 
 .form-group {
@@ -155,7 +150,6 @@ body {
   background-color: var(--hover-blue);
 }
 
-/* 結果表示エリア全体の制御 */
 .results-area {
   transition: opacity 0.3s ease;
 }
@@ -181,7 +175,6 @@ body {
 .star-icon { color: #f59e0b; }
 .sub-bus-icon { color: var(--main-blue); }
 
-/* ④ おすすめルートカード（装飾を豪華に） */
 .recommend-card {
   background-color: var(--recommend-bg);
   border: 2px solid var(--recommend-border);
@@ -265,7 +258,6 @@ body {
   display: inline-block;
 }
 
-/* ⑤ その他のルート（シンプルで目立たないデザイン） */
 .other-routes-list {
   display: flex;
   flex-direction: column;
