@@ -128,9 +128,9 @@ async function loadTimetable() {
     const date = "20260626";
     const cachedData = localStorage.getItem('bus_timetable_cache');
     if (last_date === date && cachedData) {
-        console.log('新ダイヤ（または初回）のため、データをサーバーから再取得します...');
         return JSON.parse(cachedData);
     }
+    console.log('新ダイヤ（または初回）のため、データをサーバーから再取得します...');
     const response = await fetch('./timetable.json');
     const data = await response.json();
     localStorage.setItem('bus_timetable_cache', JSON.stringify(data));
