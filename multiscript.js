@@ -25,23 +25,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultsArea = document.getElementById('resultsArea');
     const recommendRouteCard = document.getElementById('recommendRouteCard');
     const otherRoutesList = document.getElementById('otherRoutesList');
+    // 1️⃣ 【状態の復元】ページを開いた時にローカルストレージから前回値を復元する
+    restoreSavedState();
     // 駅名タップ切り替えイベント (advance用、通常ページに要素がなければスキップされる)
     stationToggle.addEventListener('click', () => {
         const currentDest = stationToggle.getAttribute('data-destination');
+        let nextDest;
         if (currentDest === 'JR') {
+            nextDest = 'Keio';
             stationToggle.setAttribute('data-destination', 'Keio');
             stationToggle.textContent = '京王八王子駅';
             stationToggleInfo.textContent = 'JR八王子駅';
         }
         else {
+            nextDest = 'JR';
             stationToggle.setAttribute('data-destination', 'JR');
             stationToggle.textContent = 'JR八王子駅';
             stationToggleInfo.textContent = '京王八王子駅';
         }
+        localStorage.setItem('bus_nav_last_destination', nextDest);
         // すでに検索結果が出ていれば自動で再検索
         if (!resultsArea.classList.contains('is-hidden')) {
             searchForm.requestSubmit();
         }
+    });
+    locationSelect?.addEventListener('change', () => {
+        localStorage.setItem('bus_nav_last_building', locationSelect.value);
+    });
+    speedSelect?.addEventListener('change', () => {
+        localStorage.setItem('bus_nav_last_speed', speedSelect.value);
     });
     // フォーム送信イベント
     searchForm.addEventListener('submit', async (e) => {
@@ -64,6 +76,36 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('ルート検索中にエラーが発生しました:', err);
         }
     });
+    if (locationSelect.value) {
+        searchForm.requestSubmit();
+    }
+    /** ローカルストレージから前回の選択状態を復元する関数 */
+    function restoreSavedState() {
+        // ① 現在地（建物）の復元
+        const savedBuilding = localStorage.getItem('bus_nav_last_building');
+        if (savedBuilding && locationSelect) {
+            locationSelect.value = savedBuilding;
+        }
+        // ② 歩くペースの復元
+        const savedSpeed = localStorage.getItem('bus_nav_last_speed');
+        if (savedSpeed && speedSelect) {
+            speedSelect.value = savedSpeed;
+        }
+        // ③ 行き先（駅名）の復元
+        const savedDestination = localStorage.getItem('bus_nav_last_destination');
+        if (savedDestination && stationToggle) {
+            stationToggle.setAttribute('data-destination', savedDestination);
+            if (savedDestination === 'Keio') {
+                stationToggle.textContent = '京王八王子駅';
+                stationToggleInfo.textContent = 'JR八王子駅';
+                // 前回のCSS設定（data-destination="Keio"の時に色を変える等）がここでも自動適用されます
+            }
+            else {
+                stationToggle.textContent = 'JR八王子駅';
+                stationToggleInfo.textContent = '京王八王子駅';
+            }
+        }
+    }
     function renderAllRoutes(data, from, to, isNextDay) {
         if (!resultsArea || !recommendRouteCard || !otherRoutesList)
             return;
