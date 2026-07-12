@@ -1,4 +1,4 @@
-const walkdata = { "中央教育棟": [10, 7, 9], "本部棟": [15, 9, 4], "教育学部棟": [4, 10, 13], "理工学部棟": [1, 15, 15] };
+const walkTable = { "中央教育棟": [10, 7, 9], "本部棟": [15, 9, 4], "教育学部棟": [4, 10, 13], "理工学部棟": [1, 15, 15] };
 document.addEventListener('DOMContentLoaded', () => {
     const searchForm = document.getElementById('searchForm');
     const locationSelect = document.getElementById('locationSelect');
