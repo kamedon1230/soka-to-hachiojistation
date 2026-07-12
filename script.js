@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     async function fetchRouteData(building, period) {
-        const bu = walkdata[building];
+        const bu = walkTable[building];
         if (bu === undefined) {
             throw new Error(`undefined ${building}`);
         }
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 async function loadTimetable() {
     const last_date = localStorage.getItem('data_base');
-    const date = 20260626;
+    const date = "20260626";
     const cachedData = localStorage.getItem('bus_timetable_cache');
     if (last_date === date && cachedData) {
         console.log('新ダイヤ（または初回）のため、データをサーバーから再取得します...');
@@ -156,17 +156,17 @@ async function findbus(time, from, limit, days) {
     let best;
     for (const bus of r1) {
         let besttime = time;
-        if (bus[2] && (bus[2] - from[0] * 60 >= besttime)) {
-            best = { from: "創価大学正門東京富士美術館", dep: bus[2], dw: bus[2] - from[0] * 60, wt: from[0], du: (bus[1] - bus[2] + from[0] * 60), type: ttn(bus[0]), at: bus[1] };
-            besttime = bus[2] - from[0];
+        if (bus[4] && (bus[3] - from[0] * 60 >= besttime)) {
+            best = { from: "創価大学正門東京富士美術館", dep: bus[3], dw: bus[3] - from[0] * 60, wt: from[0], du: (bus[1] - bus[3] + from[0] * 60), type: ttn(bus[0]), at: bus[1] };
+            besttime = bus[3] - from[0];
         }
-        if (bus[3] && (bus[3] - from[1] * 60 >= besttime)) {
-            best = { from: "創価大学創大門", dep: bus[3], dw: bus[3] - from[1] * 60, wt: from[1], du: (bus[1] - bus[3] + from[1] * 60), type: ttn(bus[0]), at: bus[1] };
-            besttime = bus[3] - from[1];
+        if (bus[4] && (bus[4] - from[1] * 60 >= besttime)) {
+            best = { from: "創価大学創大門", dep: bus[4], dw: bus[4] - from[1] * 60, wt: from[1], du: (bus[1] - bus[4] + from[1] * 60), type: ttn(bus[0]), at: bus[1] };
+            besttime = bus[4] - from[1];
         }
-        if (bus[4] && (bus[4] - from[2] * 60 >= besttime)) {
-            best = { from: "創価大学栄光門", dep: bus[4], dw: bus[4] - from[2] * 60, wt: from[2], du: (bus[1] - bus[4] + from[2] * 60), type: ttn(bus[0]), at: bus[1] };
-            besttime = bus[4] - from[2];
+        if (bus[5] && (bus[5] - from[2] * 60 >= besttime)) {
+            best = { from: "創価大学栄光門", dep: bus[5], dw: bus[5] - from[2] * 60, wt: from[2], du: (bus[1] - bus[5] + from[2] * 60), type: ttn(bus[0]), at: bus[1] };
+            besttime = bus[5] - from[2];
         }
         if (!best) {
             continue;
@@ -182,6 +182,6 @@ function toMinute(time) {
     return `${Math.round(time / 60)}`;
 }
 function toHourString(time) {
-    minute = Math.floor(time / 60);
+    const minute = Math.floor(time / 60);
     return `${(Math.floor(minute / 60)).toString().padStart(2,"0")}:${(minute % 60).toString().padStart(2,"0")}`;
 }
