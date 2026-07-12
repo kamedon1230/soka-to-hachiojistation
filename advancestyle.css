@@ -411,12 +411,10 @@ body {
   overflow: hidden;
 }
 
-/* 本物のラジオボタン（黒丸）は画面から隠す */
 .segment-control input[type="radio"] {
   display: none;
 }
 
-/* ボタンの見た目をしたラベル */
 .segment-control label {
   flex: 1;
   text-align: center;
@@ -430,14 +428,12 @@ body {
   margin: 0 !important;
 }
 
-/* ラジオボタンがチェックされた時の、隣にあるラベルのスタイル（青背景） */
 .segment-control input[type="radio"]:checked + label {
   background-color: var(--main-blue);
   color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* 駅名切り替えテキストのスタイル */
 .station-toggle {
   cursor: pointer;
   color: var(--text-muted);
@@ -447,43 +443,37 @@ body {
   display: inline-block;
 }
 
-/* ホバー時（PC） */
 .station-toggle:hover {
   color: var(--main-blue);
 }
 
-/* 🎯 現在選択されている駅のハイライト */
 .toggle-station {
   color: var(--main-blue);
   font-weight: bold;
-  border-bottom: 3px solid var(--main-blue); /* 力強い下線で選択を明示 */
+  border-bottom: 3px solid var(--main-blue);
 }
 
-/* スラッシュ（/）の見た目を少し薄く */
 .divider {
   color: var(--border-color);
   margin: 0 4px;
   font-weight: normal;
 }
 
-/* タップできる駅名のスタイル */
 .toggle-station {
   color: var(--main-blue);
-  border-bottom: 2px dashed var(--main-blue); /* タップ可能を指す下点線 */
+  border-bottom: 2px dashed var(--main-blue);
   cursor: pointer;
   padding: 0 4px;
-  user-select: none; /* スマホで長押ししたときのテキスト選択を防止 */
+  user-select: none;
   transition: background-color 0.2s ease, color 0.2s ease;
   display: inline-block;
 }
 
-/* タップ（アクティブ）時のエフェクト */
 .toggle-station:active {
   background-color: rgba(0, 91, 172, 0.1);
   border-radius: 4px;
 }
 
-/* 京王八王子駅が選ばれている時は、テーマカラーを少し変えても面白い（例: 京王風のピンク・赤系に変えるなど、お好みで！） */
 .toggle-station[data-destination="Keio"] {
   color: #dd0077; /* 京王っぽいカラー */
   border-bottom-color: #dd0077;
