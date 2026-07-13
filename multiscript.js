@@ -1,4 +1,3 @@
-"use strict";
 // ==========================================
 // 1. 型定義 (Types & Interfaces)
 // ==========================================
@@ -25,8 +24,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultsArea = document.getElementById('resultsArea');
     const recommendRouteCard = document.getElementById('recommendRouteCard');
     const otherRoutesList = document.getElementById('otherRoutesList');
+    const menuBtn = document.getElementById('menuBtn');
+    const settingsDrawer = document.getElementById('settingsDrawer');
+    const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const limitSelect = document.getElementById('limitSelect');
     // 1️⃣ 【状態の復元】ページを開いた時にローカルストレージから前回値を復元する
     restoreSavedState();
+    // ⚙️ 【新設】ハンバーガーメニュー開閉イベント
+    menuBtn.addEventListener('click', () => {
+        settingsDrawer.classList.add('is-open');
+        drawerOverlay.classList.add('is-active');
+    });
+    const closeDrawer = () => {
+        settingsDrawer.classList.remove('is-open');
+        drawerOverlay.classList.remove('is-active');
+    };
+    closeDrawerBtn.addEventListener('click', closeDrawer);
+    drawerOverlay.addEventListener('click', closeDrawer);
     // 駅名タップ切り替えイベント (advance用、通常ページに要素がなければスキップされる)
     stationToggle.addEventListener('click', () => {
         const currentDest = stationToggle.getAttribute('data-destination');
