@@ -9,6 +9,29 @@
 </head>
 
 <body>
+    <div id="settingsDrawer" class="settings-drawer">
+        <div class="drawer-header">
+            <h3>⚙️ アプリ設定</h3>
+            <button id="closeDrawerBtn" class="close-drawer-btn">&times;</button>
+        </div>
+        <div class="drawer-body">
+            <div class="form-group">
+                <label for="limitSelect">検索結果の最大表示件数</label>
+                <select id="limitSelect">
+                    <option value="2">2件</option>
+                    <option value="4" selected>4件</option>
+                    <option value="6">6件</option>
+                    <option value="8">8件</option>
+                </select>
+                <label for="SettingMemory">設定の保持</label>
+                <select id="SettingMemory">
+                    <option value="">削除する</option>
+                    <option value="true">保持する</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div id="drawerOverlay" class="drawer-overlay"></div>
 
     <header class="app-header">
         <div class="header-left">
@@ -19,7 +42,7 @@
             </div>
         </div>
         <div class="header-right">
-            <span class="notice-top">※時刻は目安です</span>
+            <button id="menuBtn" class="menu-btn" aria-label="設定メニューを開く">☰</button>
         </div>
     </header>
 

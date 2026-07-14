@@ -1,4 +1,3 @@
-"use strict";
 // ==========================================
 // 1. 型定義 (Types & Interfaces)
 // ==========================================
@@ -25,8 +24,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultsArea = document.getElementById('resultsArea');
     const recommendRouteCard = document.getElementById('recommendRouteCard');
     const otherRoutesList = document.getElementById('otherRoutesList');
+    const menuBtn = document.getElementById('menuBtn');
+    const settingsDrawer = document.getElementById('settingsDrawer');
+    const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const limitSelect = document.getElementById('limitSelect');
+    const settingMemory = document.getElementById('SettingMemory');
     // 1️⃣ 【状態の復元】ページを開いた時にローカルストレージから前回値を復元する
     restoreSavedState();
+    // ⚙️ 【新設】ハンバーガーメニュー開閉イベント
+    menuBtn.addEventListener('click', () => {
+        settingsDrawer.classList.add('is-open');
+        drawerOverlay.classList.add('is-active');
+    });
+    const closeDrawer = () => {
+        settingsDrawer.classList.remove('is-open');
+        drawerOverlay.classList.remove('is-active');
+    };
+    settingMemory.addEventListener('change', () => {
+        if (settingMemory.value === "") {
+            if (localStorage.getItem('bus_nav_clear_on_close')) {
+                localStorage.removeItem('bus_nav_clear_on_close');
+            }
+        }
+        else {
+            localStorage.setItem('bus_nav_clear_on_close', settingMemory.value);
+        }
+    });
+    closeDrawerBtn.addEventListener('click', closeDrawer);
+    drawerOverlay.addEventListener('click', closeDrawer);
     // 駅名タップ切り替えイベント (advance用、通常ページに要素がなければスキップされる)
     stationToggle.addEventListener('click', () => {
         const currentDest = stationToggle.getAttribute('data-destination');
@@ -49,10 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
             searchForm.requestSubmit();
         }
     });
-    locationSelect?.addEventListener('change', () => {
+    locationSelect.addEventListener('change', () => {
         localStorage.setItem('bus_nav_last_building', locationSelect.value);
     });
-    speedSelect?.addEventListener('change', () => {
+    speedSelect.addEventListener('change', () => {
         localStorage.setItem('bus_nav_last_speed', speedSelect.value);
     });
     // フォーム送信イベント
@@ -66,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!baseWalkTimes)
             throw new Error(`undefined ${building}`);
         try {
-            const limit = 4;
+            const limit = parseInt(limitSelect.value);
             // 司令塔関数を呼び出して探索を実行
             const { routes, isNextDay } = await searchRoutesWorkflow(period, baseWalkTimes, destination, speedFactor, limit);
             // 画面に描画
@@ -104,6 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 stationToggle.textContent = 'JR八王子駅';
                 stationToggleInfo.textContent = '京王八王子駅';
             }
+        }
+        const savedSettingMemory = localStorage.getItem('bus_nav_clear_on_close');
+        if (savedSettingMemory) {
+            settingMemory.value = savedSettingMemory;
         }
     }
     function renderAllRoutes(data, from, to, isNextDay) {
@@ -201,6 +231,17 @@ document.addEventListener('DOMContentLoaded', () => {
             otherRoutesList.innerHTML = '<p class="placeholder-text">その他のルートはありません。</p>';
         }
         resultsArea.scrollIntoView({ behavior: 'smooth' });
+    }
+});
+window.addEventListener('beforeunload', () => {
+    const shouldClear = localStorage.getItem('bus_nav_clear_on_close');
+    if (!shouldClear) {
+        // ユーザーが選択した状態（建物、スピード、駅名）を消去する
+        localStorage.removeItem('bus_nav_last_building');
+        localStorage.removeItem('bus_nav_last_speed');
+        localStorage.removeItem('bus_nav_last_destination');
+        localStorage.removeItem('bus_timetable_cache');
+        localStorage.removeItem('bus_timetable_version');
     }
 });
 // ==========================================
