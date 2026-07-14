@@ -1,6 +1,13 @@
 // ==========================================
-// 1. 型定義 (Types & Interfaces)
+// PWA Service Worker の登録処理
 // ==========================================
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('Service Worker 登録成功:', reg.scope))
+            .catch(err => console.error('Service Worker 登録失敗:', err));
+    });
+}
 // 建物から各門への通常徒歩時間（分） [正門, 創大門, 栄光門]
 const WALKING_DATA_MAP = {
     "中央教育棟": [11, 7, 9],
@@ -30,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const drawerOverlay = document.getElementById('drawerOverlay');
     const limitSelect = document.getElementById('limitSelect');
     const settingMemory = document.getElementById('SettingMemory');
+    const tableSMemory = document.getElementById('TimeTable');
     // 1️⃣ 【状態の復元】ページを開いた時にローカルストレージから前回値を復元する
     restoreSavedState();
     // ⚙️ 【新設】ハンバーガーメニュー開閉イベント
@@ -43,12 +51,22 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     settingMemory.addEventListener('change', () => {
         if (settingMemory.value === "") {
-            if (localStorage.getItem('bus_nav_clear_on_close')) {
-                localStorage.removeItem('bus_nav_clear_on_close');
+            if (localStorage.getItem('bus_nav_save_on_close')) {
+                localStorage.removeItem('bus_nav_save_on_close');
             }
         }
         else {
-            localStorage.setItem('bus_nav_clear_on_close', settingMemory.value);
+            localStorage.setItem('bus_nav_save_on_close', settingMemory.value);
+        }
+    });
+    tableSMemory.addEventListener('change', () => {
+        if (tableSMemory.value === "") {
+            if (localStorage.getItem('bus_table_save_on_close')) {
+                localStorage.removeItem('bus_table_save_on_close');
+            }
+        }
+        else {
+            localStorage.setItem('bus_table_save_on_close', settingMemory.value);
         }
     });
     closeDrawerBtn.addEventListener('click', closeDrawer);
@@ -131,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 stationToggleInfo.textContent = '京王八王子駅';
             }
         }
-        const savedSettingMemory = localStorage.getItem('bus_nav_clear_on_close');
+        const savedSettingMemory = localStorage.getItem('bus_nav_save_on_close');
         if (savedSettingMemory) {
             settingMemory.value = savedSettingMemory;
         }
@@ -234,14 +252,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 window.addEventListener('beforeunload', () => {
-    const shouldClear = localStorage.getItem('bus_nav_clear_on_close');
-    if (!shouldClear) {
+    const tableSave = localStorage.getItem('bus_table_save_on_close');
+    if (!tableSave) {
+        localStorage.removeItem('bus_timetable_cache');
+        localStorage.removeItem('bus_timetable_version');
+    }
+    const shouldSave = localStorage.getItem('bus_nav_save_on_close');
+    if (!shouldSave) {
         // ユーザーが選択した状態（建物、スピード、駅名）を消去する
         localStorage.removeItem('bus_nav_last_building');
         localStorage.removeItem('bus_nav_last_speed');
         localStorage.removeItem('bus_nav_last_destination');
-        localStorage.removeItem('bus_timetable_cache');
-        localStorage.removeItem('bus_timetable_version');
     }
 });
 // ==========================================

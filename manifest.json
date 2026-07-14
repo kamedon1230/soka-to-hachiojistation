@@ -7,7 +7,9 @@
     "background_color": "#ffffff",
     "icons": [
         {
-            "src": "img/busico.png"
+            "src": "icon-192.png",
+            "size": "192x192"
         }
-    ]
+    ],
+    "orientation": "portrait"
 }
