@@ -1,13 +1,14 @@
 {
     "short_name": "SBN",
     "name": "SOKA Bus Navigation",
-    "start_url": "https://kamedon1230.github.io/soka-to-hachiojistation/advance",
+    "start_url": "./advance.html",
     "display": "standalone",
     "theme_color": "#000000",
     "background_color": "#ffffff",
     "icons": [
         {
             "src": "icon-192.png",
+            "type": "image/png",
             "size": "192x192"
         }
     ],
