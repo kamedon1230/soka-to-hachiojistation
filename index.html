@@ -1,84 +1,145 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SOKA Bus Navigation</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOKA Bus Navigation(Beta)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#005bac">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-192.png">
 </head>
+
 <body>
-
-  <header class="app-header">
-    <div class="header-left">
-      <span class="bus-icon">🚌</span>
-      <div class="header-title-group">
-        <h1>SOKA Bus Navigation</h1>
-        <p class="subtitle">創価大学生のためのバスルート案内</p>
-      </div>
-    </div>
-    <div class="header-right">
-      <span class="notice-top">※時刻は目安です</span>
-    </div>
-  </header>
-
-  <main class="app-container">
-    
-    <section class="hero-section">
-      <h2>八王子駅までの最適ルートを案内します</h2>
-      <p>現在いる建物と検索時刻を選択すると、おすすめの帰宅ルートを表示します。</p>
-    </section>
-
-    <section class="search-section">
-      <form id="searchForm" class="search-form">
-        <div class="form-group">
-          <label for="locationSelect">現在地（建物）</label>
-          <select id="locationSelect" required>
-            <option value="" disabled selected>建物名を選択してください</option>
-            <option value="中央教育棟">中央教育棟</option>
-            <option value="本部棟">本部棟</option>
-            <option value="理工学部棟">理工学部棟</option>
-            <option value="看護学部棟">看護学部棟</option>
-            <option value="教育学部棟">教育学部棟</option>
-            <option value="学生センター">学生センター</option>
-          </select>
+    <div id="settingsDrawer" class="settings-drawer">
+        <div class="drawer-header">
+            <h3>⚙️ アプリ設定</h3>
+            <button id="closeDrawerBtn" class="close-drawer-btn">&times;</button>
         </div>
-
-        <div class="form-group">
-          <label for="periodSelect">検索時刻</label>
-          <select id="periodSelect" required>
-            <option value="現在時刻" selected>現在時刻</option>
-            <option value="1限終わり">1限終わり (10:30)</option>
-            <option value="2限終わり">2限終わり (12:15)</option>
-            <option value="3限終わり">3限終わり (14:35)</option>
-            <option value="4限終わり">4限終わり (16:20)</option>
-            <option value="5限終わり">5限終わり (18:05)</option>
-          </select>
+        <div class="drawer-body">
+            <div class="form-group">
+                <label for="limitSelect">検索結果の最大表示件数</label>
+                <select id="limitSelect">
+                    <option value="2">2件</option>
+                    <option value="4" selected>4件</option>
+                    <option value="6">6件</option>
+                    <option value="8">8件</option>
+                </select>
+                <label for="TimeTable">時刻表の保持</label>
+                <select id="TimeTable">
+                    <option value="" selected>削除する</option>
+                    <option value="true">保持する</option>
+                </select>
+                <label for="SettingMemory">その他設定の保持</label>
+                <select id="SettingMemory">
+                    <option value="">削除する</option>
+                    <option value="true">保持する</option>
+                </select>
+            </div>
         </div>
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
 
-        <button type="submit" class="search-btn">
-          <span class="search-icon">🔍</span> ルートを検索
-        </button>
-      </form>
-    </section>
+        <div class="menu-info-section"
+            style="font-size: 0.8rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 12px;">
+            <p><strong>⚠️ 免責事項・運営について</strong><br>
+                本アプリは個人が開発・運営する【非公式】のサービスです。創価大学、東日本旅客鉄道株式会社、京王電鉄株式会社、西東京バス株式会社等の公的機関・企業とは一切関係ありません。</p>
 
-    <div id="resultsArea" class="results-area is-hidden">
-      <section class="result-section">
-        <h3 class="section-title"><span class="star-icon">⭐</span> おすすめルート</h3>
-        <div id="recommendRouteCard"></div>
-      </section>
+            <p>表示される時刻データは万全を期して作成していますが、交通渋滞や臨時ダイヤ等により実際の運行と異なる場合があります。本アプリの利用によって生じた不利益や損害について、開発者は一切の責任を負いません。移動の際は時間に余裕を持ってご利用ください。
+            </p>
 
-      <section class="result-section">
-        <h3 class="section-title"><span class="sub-bus-icon">🚌</span> その他のルート</h3>
-        <div id="otherRoutesList" class="other-routes-list"></div>
-      </section>
+            <p><strong>🏷️ 商標について</strong><br>
+                本アプリに記載されている会社名、製品名、駅名、システム名等は、各社の商標または登録商標です。</p>
+        </div>
+        <footer class="drawer-footer">
+            <p>v0.1.0</p>
+        </footer>
     </div>
+    <div id="drawerOverlay" class="drawer-overlay"></div>
 
-  </main>
+    <header class="app-header">
+        <div class="header-left">
+            <span class="bus-icon">🚌</span>
+            <div class="header-title-group">
+                <h1>SOKA Bus Navigation</h1>
+                <p class="subtitle">創価大学生のためのバスルート案内</p>
+            </div>
+        </div>
+        <div class="header-right">
+            <button id="menuBtn" class="menu-btn" aria-label="設定メニューを開く">☰</button>
+        </div>
+    </header>
 
-  <footer class="app-footer">
-    <p>時刻は目安です。交通状況等により前後する場合があります。</p>
-  </footer>
+    <main class="app-container">
+        <section class="hero-section">
+            <h2>
+                <span id="stationToggle" class="toggle-station" data-destination="JR">JR八王子駅</span>
+                までの最適ルート案内
+            </h2>
+            <p>💡 駅名をタップすると<span id="stationToggleInfo">「京王八王子駅」</span>に切り替わります。</p>
+        </section>
 
-  <script src="script.js"></script>
+        <section class="search-section">
+            <form id="searchForm" class="search-form">
+                <div class="form-group">
+                    <label for="locationSelect">現在地（建物）</label>
+                    <select id="locationSelect" required>
+                        <option value="" disabled selected>建物名を選択してください</option>
+                        <option value="中央教育棟">中央教育棟</option>
+                        <option value="本部棟">本部棟</option>
+                        <option value="理工学部棟">理工学部棟</option>
+                        <option value="看護学部棟">看護学部棟</option>
+                        <option value="教育学部棟">教育学部棟</option>
+                        <option value="学生センター">学生センター</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="speedSelect">歩く速さ</label>
+                    <select id="speedSelect" required>
+                        <option value="0.8">急ぎ足</option>
+                        <option value="1.0" selected>ふつう</option>
+                        <option value="1.2">ゆっくり</option>
+                        <option value="1.5">みんなで</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="periodSelect">検索時刻</label>
+                    <select id="periodSelect" required>
+                        <option value="現在時刻" selected>現在時刻</option>
+                        <option value="1限終わり">1限終わり (10:30)</option>
+                        <option value="2限終わり">2限終わり (12:15)</option>
+                        <option value="3限終わり">3限終わり (14:35)</option>
+                        <option value="4限終わり">4限終わり (16:20)</option>
+                        <option value="5限終わり">5限終わり (18:05)</option>
+                    </select>
+                </div>
+                <button type="submit" class="search-btn">
+                    <span class="search-icon">🔍</span> ルートを検索
+                </button>
+            </form>
+        </section>
+
+        <div id="resultsArea" class="results-area is-hidden">
+            <section class="result-section">
+                <h3 class="section-title"><span class="star-icon">⭐</span> おすすめルート</h3>
+                <div id="recommendRouteCard"></div>
+            </section>
+
+            <section class="result-section">
+                <h3 class="section-title"><span class="sub-bus-icon">🚌</span> その他のルート</h3>
+                <div id="otherRoutesList" class="other-routes-list"></div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <p>時刻は目安です。交通状況等により前後する場合があります。</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
+
 </html>
