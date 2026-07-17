@@ -1,6 +1,6 @@
 const CACHE_NAME = 'soka-bus-nav-v1';
 const ASSETS = [
-  './inex.html',
+  './index.html',
   './style.css',
   './script.js',  // もしコンパイル後の名前が異なれば修正してください
   './timetable.json'
