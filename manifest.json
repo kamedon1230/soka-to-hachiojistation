@@ -1,7 +1,7 @@
 {
     "short_name": "SBN",
     "name": "SOKA Bus Navigation",
-    "start_url": "/soka-to-hachiojistation",
+    "start_url": ".",
     "display": "standalone",
     "theme_color": "#000000",
     "background_color": "#ffffff",
