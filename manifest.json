@@ -1,0 +1,16 @@
+{
+    "short_name": "SBN",
+    "name": "SOKA Bus Navigation",
+    "start_url": "./",
+    "display": "standalone",
+    "theme_color": "#000000",
+    "background_color": "#ffffff",
+    "icons": [
+        {
+            "src": "icon-192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        }
+    ],
+    "orientation": "portrait"
+}
