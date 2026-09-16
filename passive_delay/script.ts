@@ -55,15 +55,15 @@ const TIMETABLE_VERSION = "20260626";
 // 2. UI・イベント層 (Presentation)
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    const searchForm = document.getElementById('searchForm') as HTMLFormElement;
-    const locationSelect = document.getElementById('locationSelect') as HTMLSelectElement;
-    const periodSelect = document.getElementById('periodSelect') as HTMLSelectElement;
-    const speedSelect = document.getElementById('speedSelect') as HTMLSelectElement;
-    const stationToggle = document.getElementById('stationToggle') as HTMLSpanElement;
-    const stationToggleInfo = document.getElementById('stationToggleInfo') as HTMLSpanElement;
-    const resultsArea = document.getElementById('resultsArea') as HTMLDivElement;
-    const recommendRouteCard = document.getElementById('recommendRouteCard') as HTMLDivElement;
-    const otherRoutesList = document.getElementById('otherRoutesList') as HTMLDivElement;
+    const searchForm = document.getElementById('searchForm') as HTMLFormElement
+    const locationSelect = document.getElementById('locationSelect') as HTMLSelectElement
+    const periodSelect = document.getElementById('periodSelect') as HTMLSelectElement
+    const speedSelect = document.getElementById('speedSelect') as HTMLSelectElement
+    const stationToggle = document.getElementById('stationToggle') as HTMLSpanElement
+    const stationToggleInfo = document.getElementById('stationToggleInfo') as HTMLSpanElement
+    const resultsArea = document.getElementById('resultsArea') as HTMLDivElement
+    const recommendRouteCard = document.getElementById('recommendRouteCard') as HTMLDivElement
+    const otherRoutesList = document.getElementById('otherRoutesList') as HTMLDivElement
     const menuBtn = document.getElementById('menuBtn') as HTMLButtonElement;
     const settingsDrawer = document.getElementById('settingsDrawer') as HTMLDivElement;
     const closeDrawerBtn = document.getElementById('closeDrawerBtn') as HTMLButtonElement;
