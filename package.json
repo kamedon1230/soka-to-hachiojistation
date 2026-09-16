@@ -1,0 +1,20 @@
+{
+  "name": "soka-to-hachiojistation",
+  "version": "1.0.0",
+  "description": "創価大学からバスで早く八王子駅に行くプロジェクト",
+  "homepage": "https://github.com/kamedon1230/soka-to-hachiojistation#readme",
+  "bugs": {
+    "url": "https://github.com/kamedon1230/soka-to-hachiojistation/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kamedon1230/soka-to-hachiojistation.git"
+  },
+  "type": "module",
+  "main": "main.js",
+  "dependencies": {
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2"
+  },
+  "devDependencies": {}
+}
